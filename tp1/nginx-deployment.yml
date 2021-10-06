@@ -1,0 +1,26 @@
+apiVersion: apps/v1 #version api
+kind: Deployment #type objet
+metadata:
+  name: nginx-deployment #nom du deployment
+  labels:
+    app: nginx #definition du label
+spec:        #specification technique du deployment
+  replicas: 2  
+  strategy:  #stratégie de mise a jour(rollingUpdate=supprime encien pod et on deploy un nouveau)
+   type: RollingUpdate
+   rollingUpdate:
+     maxSurge: 1
+     maxUnavailable: 1
+  selector:  #designe les pods dont le deployment aurra la gestion
+    matchLabels:
+      app: nginx
+  template: #model de pod à deployé dont le replicat sera de deux
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.18.0
+          ports:
+          - containerPort: 80
